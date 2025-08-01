@@ -55,25 +55,16 @@ const dummyFlights = [
 
 
 export async function seed() {
-    await pool.query(`CREATE TABLE IF NOT EXISTS flights (
-    id SERIAL PRIMARY KEY,
-    source TEXT NOT NULL,
-    destination TEXT NOT NULL,
-    departure_time TEXT,
-    arrival_time TEXT,
-    flight_number TEXT UNIQUE
-  )`);
-
     for (const [ src, dest, dep, arr, num ] of dummyFlights) {
         try {
             await pool.query(
                 `INSERT INTO flights (source, destination, departure_time, arrival_time, flight_number)
        VALUES ($1, $2, $3, $4, $5)
-       ON CONFLICT (flight_number) DO NOTHING`,
+       ON CONFLICT (flight_number) DO NOTHING;`,
                 [ src, dest, dep, arr, num ]
             );
-        } catch (error) {
-            console.error(`Error inserting flight ${num}:`, error);
+        } catch (e) {
+            console.error("Error creating table:", e);
         }
     }
 

@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { FlightSearchService } from "../services/FlightSearchService.js";
 import { seed } from "../seed/seedFlights.js";
 
-const service = new FlightSearchService();
 await seed();
+const service = new FlightSearchService();
 await service.initGraph();
 
 export class FlightController {
