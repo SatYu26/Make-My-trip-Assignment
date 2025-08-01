@@ -1,5 +1,5 @@
 import express from "express";
-import bookingRoutes from "./routes/bookingRoutes";
+import bookingRoutes from "./routes/bookingRoutes.js";
 import dotenv from "dotenv";
 dotenv.config();
 

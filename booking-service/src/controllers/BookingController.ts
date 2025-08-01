@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { BookingService } from "../services/BookingService";
+import { BookingService } from "../services/BookingService.js";
 
 const service = new BookingService();
 await service.initTables();

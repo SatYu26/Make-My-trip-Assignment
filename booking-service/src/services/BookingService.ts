@@ -1,6 +1,6 @@
-import { pool } from "../config/db";
+import { pool } from "../config/db.js";
 import axios from "axios";
-import { Booking, Passenger } from "../models/Booking";
+import { Booking, Passenger } from "../models/Booking.js";
 
 export class BookingService {
     async initTables() {

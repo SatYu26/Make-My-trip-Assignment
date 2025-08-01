@@ -1,5 +1,5 @@
 import express from "express";
-import discountRoutes from "./routes/discountRoutes";
+import discountRoutes from "./routes/discountRoutes.js";
 import dotenv from "dotenv";
 dotenv.config();
 

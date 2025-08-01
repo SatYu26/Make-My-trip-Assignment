@@ -1,5 +1,5 @@
 import express from "express";
-import seatRoutes from "./routes/seatRoutes";
+import seatRoutes from "./routes/seatRoutes.js";
 import dotenv from "dotenv";
 dotenv.config();
 

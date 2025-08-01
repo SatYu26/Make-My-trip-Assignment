@@ -1,5 +1,5 @@
 import express from "express";
-import gatewayRoutes from "./routes/gateway";
+import gatewayRoutes from "./routes/gateway.js";
 
 const app = express();
 app.use(gatewayRoutes);

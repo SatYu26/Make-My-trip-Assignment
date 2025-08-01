@@ -1,5 +1,5 @@
 import express from "express";
-import ticketRoutes from "./routes/ticketRoutes";
+import ticketRoutes from "./routes/ticketRoutes.js";
 import dotenv from "dotenv";
 dotenv.config();
 

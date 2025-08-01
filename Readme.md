@@ -87,7 +87,7 @@ This project simulates the backend of a flight booking platform like MakeMyTrip 
 ```bash
 git clone <repo-url>
 cd flight-booking-system
-docker-compose up --build
+docker compose up --build
 ```
 
 This will boot all services in one go.
