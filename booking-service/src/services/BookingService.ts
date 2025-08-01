@@ -50,8 +50,9 @@ export class BookingService {
                 }
             );
 
-            if (seatConfirm.data.error) {
-                throw new Error(seatConfirm.data.error);
+            const seatData = seatConfirm.data as { error?: string };
+            if (seatData.error) {
+                throw new Error(seatData.error);
             }
 
             await client.query(
