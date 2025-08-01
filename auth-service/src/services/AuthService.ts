@@ -1,7 +1,7 @@
-import { pool } from "../config/db";
+import { pool } from "../config/db.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { User } from "../models/User";
+import { User } from "../models/User.js";
 
 export class AuthService {
     async signup(email: string, password: string): Promise<User> {
