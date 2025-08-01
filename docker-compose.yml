@@ -9,7 +9,8 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:postgres@auth-db:5432/authdb
     depends_on:
-      - auth-db
+      auth-db:
+        condition: service_healthy
 
   auth-db:
     image: postgres:14
@@ -19,6 +20,11 @@ services:
       POSTGRES_DB: authdb
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
 
   # Flight Search
   flight-search:
@@ -28,7 +34,8 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:postgres@flight-db:5432/flightsdb
     depends_on:
-      - flight-db
+      flight-db:
+        condition: service_healthy
 
   flight-db:
     image: postgres:14
@@ -38,6 +45,11 @@ services:
       POSTGRES_DB: flightsdb
     ports:
       - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
 
   # Seat Inventory
   seat-service:
@@ -48,8 +60,10 @@ services:
       - DATABASE_URL=postgres://postgres:postgres@seat-db:5432/seatdb
       - REDIS_URL=redis://redis:6379
     depends_on:
-      - seat-db
-      - redis
+      seat-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   seat-db:
     image: postgres:14
@@ -59,12 +73,22 @@ services:
       POSTGRES_DB: seatdb
     ports:
       - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
 
   # Redis (shared)
   redis:
     image: redis:7
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
 
   # Booking
   booking-service:
@@ -75,8 +99,10 @@ services:
       - DATABASE_URL=postgres://postgres:postgres@booking-db:5432/bookingdb
       - SEAT_SERVICE_URL=http://seat-service:5000/api/seats/confirm
     depends_on:
-      - booking-db
-      - seat-service
+      booking-db:
+        condition: service_healthy
+      seat-service:
+        condition: service_healthy
 
   booking-db:
     image: postgres:14
@@ -86,6 +112,11 @@ services:
       POSTGRES_DB: bookingdb
     ports:
       - "5435:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
 
   # Payment
   payment-service:
@@ -95,7 +126,8 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:postgres@payment-db:5432/paymentdb
     depends_on:
-      - payment-db
+      payment-db:
+        condition: service_healthy
 
   payment-db:
     image: postgres:14
@@ -105,6 +137,11 @@ services:
       POSTGRES_DB: paymentdb
     ports:
       - "5436:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
 
   # Discount
   discount-service:
@@ -114,7 +151,8 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:postgres@discount-db:5432/discountdb
     depends_on:
-      - discount-db
+      discount-db:
+        condition: service_healthy
 
   discount-db:
     image: postgres:14
@@ -124,6 +162,11 @@ services:
       POSTGRES_DB: discountdb
     ports:
       - "5437:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
 
   # Ticket
   ticket-service:
@@ -133,7 +176,8 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:postgres@booking-db:5432/bookingdb
     depends_on:
-      - booking-db
+      booking-db:
+        condition: service_healthy
 
   # Notification
   notification-service:
@@ -156,11 +200,19 @@ services:
       - TICKET_SERVICE_URL=http://ticket-service:9000
       - NOTIFICATION_SERVICE_URL=http://notification-service:9100
     depends_on:
-      - auth-service
-      - flight-search
-      - seat-service
-      - booking-service
-      - payment-service
-      - discount-service
-      - ticket-service
-      - notification-service
+      auth-service:
+        condition: service_started
+      flight-search:
+        condition: service_started
+      seat-service:
+        condition: service_started
+      booking-service:
+        condition: service_started
+      payment-service:
+        condition: service_started
+      discount-service:
+        condition: service_started
+      ticket-service:
+        condition: service_started
+      notification-service:
+        condition: service_started
