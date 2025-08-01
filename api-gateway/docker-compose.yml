@@ -1,0 +1,24 @@
+version: "3.8"
+services:
+  api-gateway:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth-service
+      - flight-search
+      - seat-service
+      - booking-service
+      - payment-service
+      - discount-service
+      - ticket-service
+      - notification-service
+    environment:
+      - AUTH_SERVICE_URL=http://auth-service:3000
+      - FLIGHT_SEARCH_URL=http://flight-search:4000
+      - SEAT_SERVICE_URL=http://seat-service:5000
+      - BOOKING_SERVICE_URL=http://booking-service:6000
+      - PAYMENT_SERVICE_URL=http://payment-service:7000
+      - DISCOUNT_SERVICE_URL=http://discount-service:8000
+      - TICKET_SERVICE_URL=http://ticket-service:9000
+      - NOTIFICATION_SERVICE_URL=http://notification-service:9100
