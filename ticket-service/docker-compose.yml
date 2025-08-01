@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  ticket-service:
+    build: .
+    ports:
+      - "9000:9000"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/bookingdb
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+
+  postgres:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bookingdb
+    ports:
+      - "5435:5432"
