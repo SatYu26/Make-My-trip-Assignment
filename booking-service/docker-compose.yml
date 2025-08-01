@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  booking-service:
+    build: .
+    ports:
+      - "6000:6000"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/bookingdb
+      - SEAT_SERVICE_URL=http://seat-service:5000/api/seats/confirm
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+
+  postgres:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bookingdb
+    ports:
+      - "5435:5432"
