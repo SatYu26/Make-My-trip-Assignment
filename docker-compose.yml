@@ -1,0 +1,166 @@
+version: "3.8"
+
+services:
+  # Auth Service
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@auth-db:5432/authdb
+    depends_on:
+      - auth-db
+
+  auth-db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: authdb
+    ports:
+      - "5432:5432"
+
+  # Flight Search
+  flight-search:
+    build: ./flight-search-service
+    ports:
+      - "4000:4000"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@flight-db:5432/flightsdb
+    depends_on:
+      - flight-db
+
+  flight-db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: flightsdb
+    ports:
+      - "5433:5432"
+
+  # Seat Inventory
+  seat-service:
+    build: ./seat-service
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@seat-db:5432/seatdb
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - seat-db
+      - redis
+
+  seat-db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: seatdb
+    ports:
+      - "5434:5432"
+
+  # Redis (shared)
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  # Booking
+  booking-service:
+    build: ./booking-service
+    ports:
+      - "6000:6000"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@booking-db:5432/bookingdb
+      - SEAT_SERVICE_URL=http://seat-service:5000/api/seats/confirm
+    depends_on:
+      - booking-db
+      - seat-service
+
+  booking-db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bookingdb
+    ports:
+      - "5435:5432"
+
+  # Payment
+  payment-service:
+    build: ./payment-service
+    ports:
+      - "7000:7000"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@payment-db:5432/paymentdb
+    depends_on:
+      - payment-db
+
+  payment-db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: paymentdb
+    ports:
+      - "5436:5432"
+
+  # Discount
+  discount-service:
+    build: ./discount-service
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@discount-db:5432/discountdb
+    depends_on:
+      - discount-db
+
+  discount-db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: discountdb
+    ports:
+      - "5437:5432"
+
+  # Ticket
+  ticket-service:
+    build: ./ticket-service
+    ports:
+      - "9000:9000"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@booking-db:5432/bookingdb
+    depends_on:
+      - booking-db
+
+  # Notification
+  notification-service:
+    build: ./notification-service
+    ports:
+      - "9100:9100"
+
+  # API Gateway
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - AUTH_SERVICE_URL=http://auth-service:3000
+      - FLIGHT_SEARCH_URL=http://flight-search:4000
+      - SEAT_SERVICE_URL=http://seat-service:5000
+      - BOOKING_SERVICE_URL=http://booking-service:6000
+      - PAYMENT_SERVICE_URL=http://payment-service:7000
+      - DISCOUNT_SERVICE_URL=http://discount-service:8000
+      - TICKET_SERVICE_URL=http://ticket-service:9000
+      - NOTIFICATION_SERVICE_URL=http://notification-service:9100
+    depends_on:
+      - auth-service
+      - flight-search
+      - seat-service
+      - booking-service
+      - payment-service
+      - discount-service
+      - ticket-service
+      - notification-service
