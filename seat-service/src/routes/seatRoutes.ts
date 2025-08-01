@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { SeatController } from "../controllers/SeatController";
+import { SeatController } from "../controllers/SeatController.js";
 
 const router = Router();
 router.get("/available", SeatController.getAvailable);

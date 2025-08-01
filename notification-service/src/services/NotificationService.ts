@@ -1,4 +1,4 @@
-import { NotificationRequest } from "../models/Notification";
+import { NotificationRequest } from "../models/Notification.js";
 
 export class NotificationService {
     async send(notification: NotificationRequest): Promise<{ status: string }> {

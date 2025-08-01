@@ -1,5 +1,5 @@
-import { pool } from "../config/db";
-import { redis } from "../config/redis";
+import { pool } from "../config/db.js";
+import { redis } from "../config/redis.js";
 
 export class SeatService {
     async initSeatTable() {

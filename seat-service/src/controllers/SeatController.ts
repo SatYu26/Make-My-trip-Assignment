@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { SeatService } from "../services/SeatService";
+import { SeatService } from "../services/SeatService.js";
 
 const service = new SeatService();
 await service.initSeatTable();

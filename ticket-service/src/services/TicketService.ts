@@ -1,5 +1,5 @@
-import { pool } from "../config/db";
-import { Ticket } from "../models/Ticket";
+import { pool } from "../config/db.js";
+import { Ticket } from "../models/Ticket.js";
 
 export class TicketService {
     async fetchTicket(bookingId: number): Promise<Ticket | null> {

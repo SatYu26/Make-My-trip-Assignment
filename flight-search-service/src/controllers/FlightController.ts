@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { FlightSearchService } from "../services/FlightSearchService";
+import { FlightSearchService } from "../services/FlightSearchService.js";
 
 const service = new FlightSearchService();
 await service.initGraph();

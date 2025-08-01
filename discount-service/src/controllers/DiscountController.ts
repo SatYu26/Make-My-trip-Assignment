@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { DiscountService } from "../services/DiscountService";
+import { DiscountService } from "../services/DiscountService.js";
 
 const service = new DiscountService();
 await service.initTable();

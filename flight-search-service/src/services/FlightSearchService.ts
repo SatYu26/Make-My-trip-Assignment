@@ -1,6 +1,6 @@
-import { pool } from "../config/db";
-import { Flight } from "../models/Flight";
-import { FlightGraph } from "../utils/Graph";
+import { pool } from "../config/db.js";
+import { Flight } from "../models/Flight.js";
+import { FlightGraph } from "../utils/Graph.js";
 
 export class FlightSearchService {
     private graph = new FlightGraph();

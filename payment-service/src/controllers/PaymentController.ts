@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PaymentService } from "../services/PaymentService";
+import { PaymentService } from "../services/PaymentService.js";
 
 const service = new PaymentService();
 await service.initTable();

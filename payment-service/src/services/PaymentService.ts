@@ -1,5 +1,5 @@
-import { pool } from "../config/db";
-import { Payment } from "../models/Payment";
+import { pool } from "../config/db.js";
+import { Payment } from "../models/Payment.js";
 import crypto from "crypto";
 
 export class PaymentService {

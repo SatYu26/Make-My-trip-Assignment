@@ -1,4 +1,4 @@
-import { pool } from "../config/db";
+import { pool } from "../config/db.js";
 
 const dummyFlights = [
     [ "DEL", "BOM", "10:00", "12:00", "AI101" ],
