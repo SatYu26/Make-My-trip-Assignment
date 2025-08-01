@@ -39,7 +39,7 @@ This project simulates the backend of a flight booking platform like MakeMyTrip 
 ## 🧩 Architecture Overview
 
 
-<img src="https://github.com/SatYu26/Make-My-trip-Assignment/blob/master/mmt.png" alt="System Design" style="float: left; margin-right: 20px;" width="500px" />
+<img src="https://github.com/SatYu26/Make-My-trip-Assignment/blob/main/mmt.png" alt="System Design" style="float: left; margin-right: 20px;" width="500px" />
 
 
 ```text
