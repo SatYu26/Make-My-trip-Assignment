@@ -8,7 +8,7 @@ const dummyFlights = [
     [ "DEL", "BLR", "06:00", "08:30", "AI105" ],
 ];
 
-async function seed() {
+export async function seed() {
     await pool.query(`CREATE TABLE IF NOT EXISTS flights (
     id SERIAL PRIMARY KEY,
     source TEXT NOT NULL,
@@ -28,7 +28,7 @@ async function seed() {
     }
 
     console.log("Flights seeded");
-    process.exit();
+    // process.exit();
 }
 
 seed();
