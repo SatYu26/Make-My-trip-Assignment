@@ -168,16 +168,3 @@ flight-booking-system/
 * Persist Redis data with Redis AOF or RDB in production
 * Add retries + circuit breakers for downstream calls
 * Run DB and Redis as managed services (e.g., GCP Cloud SQL, Memorystore)
-
----
-
-## 🧑‍💻 Contributing
-
-To add new features:
-
-* Clone one service
-* Add routes in `routes/`
-* Add logic in `controllers/` and `services/`
-* Add the route proxy in `api-gateway/`
-
----
