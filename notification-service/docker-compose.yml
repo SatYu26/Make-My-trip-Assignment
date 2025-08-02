@@ -1,8 +1,9 @@
 version: "3.8"
 services:
   notification-service:
-    build: .
+    build: ./notification-service
     ports:
       - "9100:9100"
-    volumes:
-      - .:/app
+    depends_on:
+      seat-service:
+        condition: service_healthy

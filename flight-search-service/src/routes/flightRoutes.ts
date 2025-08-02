@@ -1,10 +1,8 @@
 import { Router } from "express";
-import { FlightController } from "../controllers/FlightController.js";
+import { searchFlights } from "../controllers/FlightController.js";
 import { authenticateJWT } from '../middleware/authMiddleware.js';
 
 const router = Router();
-router.get("/search", authenticateJWT, FlightController.searchFlights);
-router.get("/direct", authenticateJWT, FlightController.directFlights);
-
+router.get("/search", authenticateJWT, searchFlights);
 
 export default router;

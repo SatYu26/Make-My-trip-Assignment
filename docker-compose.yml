@@ -11,6 +11,11 @@ services:
     depends_on:
       auth-db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   auth-db:
     image: postgres:14
@@ -36,6 +41,11 @@ services:
     depends_on:
       flight-db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   flight-db:
     image: postgres:14
@@ -110,6 +120,11 @@ services:
         condition: service_healthy
       seat-service:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   booking-db:
     image: postgres:14
@@ -135,6 +150,11 @@ services:
     depends_on:
       payment-db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   payment-db:
     image: postgres:14
@@ -160,6 +180,11 @@ services:
     depends_on:
       discount-db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   discount-db:
     image: postgres:14
@@ -185,12 +210,22 @@ services:
     depends_on:
       booking-db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   # Notification
   notification-service:
     build: ./notification-service
     ports:
       - "9100:9100"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9100/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   # API Gateway
   api-gateway:
@@ -208,18 +243,23 @@ services:
       - NOTIFICATION_SERVICE_URL=http://notification-service:9100
     depends_on:
       auth-service:
-        condition: service_started
+        condition: service_healthy
       flight-search:
-        condition: service_started
+        condition: service_healthy
       seat-service:
-        condition: service_started
+        condition: service_healthy
       booking-service:
-        condition: service_started
+        condition: service_healthy
       payment-service:
-        condition: service_started
+        condition: service_healthy
       discount-service:
-        condition: service_started
+        condition: service_healthy
       ticket-service:
-        condition: service_started
+        condition: service_healthy
       notification-service:
-        condition: service_started
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5

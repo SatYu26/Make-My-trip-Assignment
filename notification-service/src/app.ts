@@ -1,11 +1,9 @@
 import express from "express";
-import notificationRoutes from "./routes/notificationRoutes.js";
+import bodyParser from "body-parser";
+import NotificationController from "./controllers/NotificationController.js";
 
 const app = express();
-app.use(express.json());
-app.use("/api/notify", notificationRoutes);
+app.use(bodyParser.json());
+app.use("/api/notifications", NotificationController);
 
-const PORT = process.env.PORT || 9100;
-app.listen(PORT, () => {
-    console.log(`Notification Service running on port ${PORT}`);
-});
+export default app;

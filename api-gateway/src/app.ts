@@ -1,10 +1,12 @@
 import express from "express";
-import gatewayRoutes from "./routes/gateway.js";
+import dotenv from "dotenv";
+import router from "./routes/gatewayRoutes.js";
+
+dotenv.config();
 
 const app = express();
-app.use(gatewayRoutes);
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-    console.log(`API Gateway running on port ${PORT}`);
-});
+app.use(express.json());
+app.use("/api", router);
+
+export default app;

@@ -1,16 +1,20 @@
-import { Request, Response } from "express";
-import { NotificationService } from "../services/NotificationService.js";
+import { Request, Response, Router } from "express";
+import { authenticate } from "../middlewares/authMiddleware.js";
 
-const service = new NotificationService();
+const router = Router();
 
-export class NotificationController {
-    static async send(req: Request, res: Response) {
-        const { to, type, subject, message } = req.body;
-        if (!to || !type || !message) {
-            return res.status(400).json({ error: "Missing required fields" });
-        }
+router.get("/health", (req: Request, res: Response) => res.sendStatus(200));
 
-        const result = await service.send({ to, type, subject, message });
-        return res.json(result);
+// Send notification (dummy)
+router.post("/send", authenticate, async (req: Request, res: Response) => {
+    const { userId, message } = req.body;
+    if (!userId || !message) {
+        return res.status(400).json({ error: "Missing userId or message" });
     }
-}
+
+    // Simulate message delivery
+    console.log(`Sending notification to user ${userId}: ${message}`);
+    res.json({ status: "Notification sent" });
+});
+
+export default router;

@@ -1,10 +1,12 @@
 api-gateway/
 ├── src/
+│   ├── middlewares/
+│   │   └── authMiddleware.ts
 │   ├── routes/
-│   │   └── gateway.ts
-│   └── app.ts
+│   │   └── gatewayRoutes.ts
+│   ├── app.ts
+│   └── server.ts
 ├── Dockerfile
-├── docker-compose.yml
-├── package.json
 ├── tsconfig.json
-└── .env
+├── package.json
+└── README.md

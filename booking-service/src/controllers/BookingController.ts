@@ -1,4 +1,3 @@
-// src/controllers/bookingController.ts
 import { Request, Response } from "express";
 import { BookingService } from "../services/BookingService.js";
 import { verifyAuth } from "../middlewares/authMiddleware.js";
@@ -16,7 +15,8 @@ export class BookingController {
             const booking = await BookingService.createBooking({ userId, flightId, seats, price });
             res.status(201).json({ message: "Booking created", booking });
         } catch (err) {
-            res.status(500).json({ error: "Failed to create booking", details: err.message });
+            const errorMessage = err instanceof Error ? err.message : String(err);
+            res.status(500).json({ error: "Failed to create booking", details: errorMessage });
         }
     }
 
@@ -29,7 +29,8 @@ export class BookingController {
             if (!booking) return res.status(404).json({ error: "Booking not found" });
             res.status(200).json(booking);
         } catch (err) {
-            res.status(500).json({ error: "Failed to fetch booking", details: err.message });
+            const errorMessage = err instanceof Error ? err.message : String(err);
+            res.status(500).json({ error: "Failed to fetch booking", details: errorMessage });
         }
     }
 }

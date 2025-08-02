@@ -1,18 +1,36 @@
 import { Request, Response } from "express";
-import { DiscountService } from "../services/DiscountService.js";
+import { pool } from "../config/db.js";
 
-const service = new DiscountService();
-await service.initTable();
+export const applyDiscount = async (req: Request, res: Response) => {
+    const { bookingId, code } = req.body;
 
-export class DiscountController {
-    static async validate(req: Request, res: Response) {
-        const { code, total } = req.body;
-        if (!code || typeof total !== "number") {
-            return res.status(400).json({ error: "Missing code or total" });
-        }
-
-        const result = await service.applyDiscount(code, total);
-        if ("error" in result) return res.status(400).json(result);
-        return res.json(result);
+    if (!bookingId || !code) {
+        return res.status(400).json({ message: "Missing bookingId or discount code." });
     }
-}
+
+    const { rows: discountRows } = await pool.query(
+        `SELECT * FROM discounts WHERE code = $1 AND is_active = true`,
+        [ code ]
+    );
+
+    if (discountRows.length === 0) {
+        return res.status(404).json({ message: "Invalid or expired discount code." });
+    }
+
+    const discount = discountRows[ 0 ];
+
+    // Simulate booking status validation (to restrict flow)
+    const { rows: bookingRows } = await pool.query(
+        `SELECT status FROM bookings WHERE id = $1`,
+        [ bookingId ]
+    );
+
+    if (!bookingRows.length || bookingRows[ 0 ].status !== 'PAID') {
+        return res.status(400).json({ message: "Discount can only be applied after payment." });
+    }
+
+    // Apply discount
+    const finalAmount = Math.max(0, bookingRows[ 0 ].amount - discount.amount);
+
+    res.json({ message: "Discount applied", finalAmount });
+};

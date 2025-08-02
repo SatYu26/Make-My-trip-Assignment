@@ -1,8 +1,17 @@
-// src/services/BookingService.ts
 import { pool } from "../config/db.js";
 
 export class BookingService {
-    static async createBooking({ userId, flightId, seats, price }) {
+    static async createBooking({
+        userId,
+        flightId,
+        seats,
+        price
+    }: {
+        userId: string;
+        flightId: string;
+        seats: number;
+        price: number;
+    }) {
         const result = await pool.query(
             `INSERT INTO bookings (user_id, flight_id, seats, price, status)
        VALUES ($1, $2, $3, $4, $5)
