@@ -1,19 +1,24 @@
 seat-service/
+│
 ├── src/
+│   ├── config/
+│   │   └── db.ts
+│   │   └── redis.ts
 │   ├── controllers/
 │   │   └── SeatController.ts
-│   ├── services/
-│   │   └── SeatService.ts
-│   ├── models/
-│   │   └── Seat.ts
-│   ├── config/
-│   │   ├── db.ts
-│   │   └── redis.ts
+│   ├── middlewares/
+│   │   └── authMiddleware.ts
 │   ├── routes/
 │   │   └── seatRoutes.ts
+│   ├── services/
+│   │   └── SeatService.ts
+│   ├── utils/
+│   │   └── cacheUtils.ts
 │   └── app.ts
+│
+├── seed/
+│   └── seedSeats.ts
 ├── Dockerfile
-├── docker-compose.yml
 ├── tsconfig.json
 ├── package.json
-└── .env
+└── README.md

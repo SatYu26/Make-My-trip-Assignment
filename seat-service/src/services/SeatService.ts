@@ -1,60 +1,33 @@
 import { pool } from "../config/db.js";
-import { redis } from "../config/redis.js";
+import { redisClient } from "../config/redis.js";
+import { invalidateCache } from "../utils/cacheUtils.js";
 
 export class SeatService {
-    async initSeatTable() {
-        await pool.query(`CREATE TABLE IF NOT EXISTS seats (
-      id SERIAL PRIMARY KEY,
-      flight_id INT NOT NULL,
-      seat_number TEXT NOT NULL,
-      status TEXT CHECK (status IN ('available', 'booked')) DEFAULT 'available'
-    )`);
-    }
+    static async getAvailableSeats(flightId: number) {
+        const cacheKey = `seats:${flightId}`;
+        const cached = await redisClient.get(cacheKey);
 
-    async getAvailableSeats(flightId: number): Promise<string[]> {
+        if (cached) {
+            return JSON.parse(cached);
+        }
+
         const result = await pool.query(
-            "SELECT seat_number FROM seats WHERE flight_id = $1 AND status = 'available'",
+            "SELECT seat_number FROM seats WHERE flight_id = $1 AND is_booked = false",
             [ flightId ]
         );
-        return result.rows.map(row => row.seat_number);
+
+        const seats = result.rows.map(row => row.seat_number);
+        await redisClient.setEx(cacheKey, 300, JSON.stringify(seats));
+        return seats;
     }
 
-    async lockSeats(userId: string, flightId: number, seats: string[]) {
-        const key = `lock:${userId}:${flightId}`;
-        const lockData = JSON.stringify({ seats });
+    static async lockSeat(flightId: number, seatNumber: string, userId: string) {
+        await pool.query(
+            "UPDATE seats SET is_booked = true, booked_by = $1 WHERE flight_id = $2 AND seat_number = $3 AND is_booked = false",
+            [ userId, flightId, seatNumber ]
+        );
 
-        await redis.setEx(key, 600, lockData); // 10 min lock
-        return { message: "Seats locked", expiresIn: "10 minutes" };
-    }
-
-    async confirmBooking(userId: string, flightId: number) {
-        const key = `lock:${userId}:${flightId}`;
-        const data = await redis.get(key);
-        if (!data) return { error: "No locked seats found" };
-
-        const { seats } = JSON.parse(data);
-        const client = await pool.connect();
-
-        try {
-            await client.query("BEGIN");
-
-            for (const seat of seats) {
-                const res = await client.query(
-                    "UPDATE seats SET status = 'booked' WHERE flight_id = $1 AND seat_number = $2 AND status = 'available'",
-                    [ flightId, seat ]
-                );
-                if (res.rowCount === 0) throw new Error(`Seat ${seat} already booked`);
-            }
-
-            await client.query("COMMIT");
-            await redis.del(key);
-            return { message: "Seats booked successfully", seats };
-        } catch (e) {
-            await client.query("ROLLBACK");
-            const errorMessage = e instanceof Error ? e.message : String(e);
-            return { error: errorMessage };
-        } finally {
-            client.release();
-        }
+        await invalidateCache(flightId);
+        return { flightId, seatNumber };
     }
 }

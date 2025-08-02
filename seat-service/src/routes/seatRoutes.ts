@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { SeatController } from "../controllers/SeatController.js";
+import { getAvailableSeats, lockSeat } from "../controllers/SeatController.js";
+import { authenticateJWT } from "../middlewares/authMiddleware.js";
 
 const router = Router();
-router.get("/available", SeatController.getAvailable);
-router.post("/lock", SeatController.lock);
-router.post("/confirm", SeatController.confirm);
+
+router.get("/:flightId", authenticateJWT, getAvailableSeats);
+router.post("/lock", authenticateJWT, lockSeat);
 
 export default router;

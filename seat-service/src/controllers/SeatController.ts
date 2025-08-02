@@ -1,25 +1,18 @@
 import { Request, Response } from "express";
 import { SeatService } from "../services/SeatService.js";
 
-const service = new SeatService();
-await service.initSeatTable();
+export const getAvailableSeats = async (req: Request, res: Response) => {
+    const flightId = Number(req.params.flightId);
+    const seats = await SeatService.getAvailableSeats(flightId);
+    res.json({ flightId, availableSeats: seats });
+};
 
-export class SeatController {
-    static async getAvailable(req: Request, res: Response) {
-        const flightId = Number(req.query.flightId);
-        const seats = await service.getAvailableSeats(flightId);
-        return res.json({ seats });
-    }
+export const lockSeat = async (req: Request, res: Response) => {
+    const { flightId, seatNumber } = req.body;
+    const userId = (req as any).user?.id;
 
-    static async lock(req: Request, res: Response) {
-        const { userId, flightId, seats } = req.body;
-        const result = await service.lockSeats(userId, flightId, seats);
-        return res.json(result);
-    }
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
-    static async confirm(req: Request, res: Response) {
-        const { userId, flightId } = req.body;
-        const result = await service.confirmBooking(userId, flightId);
-        return res.json(result);
-    }
-}
+    const result = await SeatService.lockSeat(flightId, seatNumber, userId);
+    res.json({ message: "Seat locked", ...result });
+};
