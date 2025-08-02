@@ -127,6 +127,9 @@ NOTIFICATION_SERVICE_URL=http://notification-service:9100
 
 Below is a complete end-to-end simulation of a flight booking using Postman or cURL. All APIs are routed via the **API Gateway** (`http://localhost:8080`):
 
+NOTE: **MAKE SURE ALL SERVICES ARE RUNNING
+IT CAN SHOW THAT SOME SERVICES HAVE  FAILED BUT JUST GO TO DOCKER DESKTOP AND MANUALLY START THEM ONCE AND IT WILL START WORKING.**
+
 1. **Signup**
 
    ```
