@@ -15,7 +15,8 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
       interval: 5s
       timeout: 3s
-      retries: 5
+      retries: 10
+      start_period: 20s
 
   auth-db:
     image: postgres:14
@@ -29,7 +30,8 @@ services:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 3s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 20s
 
   # Flight Search
   flight-search:
@@ -45,7 +47,8 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
       interval: 5s
       timeout: 3s
-      retries: 5
+      retries: 10
+      start_period: 20s
 
   flight-db:
     image: postgres:14
@@ -61,7 +64,8 @@ services:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 3s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 20s
 
   # Seat Inventory
   seat-service:
@@ -80,7 +84,8 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
       interval: 5s
       timeout: 3s
-      retries: 5
+      retries: 10
+      start_period: 20s
 
   seat-db:
     image: postgres:14
@@ -96,7 +101,8 @@ services:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 3s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 20s
 
   # Redis (shared)
   redis:
@@ -107,7 +113,8 @@ services:
       test: ["CMD", "redis-cli", "ping"]
       interval: 3s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 20s
 
   # Booking
   booking-service:
@@ -126,7 +133,8 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:6000/health"]
       interval: 5s
       timeout: 3s
-      retries: 5
+      retries: 10
+      start_period: 20s
 
   booking-db:
     image: postgres:14
@@ -142,7 +150,8 @@ services:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 3s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 20s
 
   # Payment
   payment-service:
@@ -158,7 +167,8 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:7000/health"]
       interval: 5s
       timeout: 3s
-      retries: 5
+      retries: 10
+      start_period: 20s
 
   payment-db:
     image: postgres:14
@@ -174,7 +184,8 @@ services:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 3s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 20s
 
   # Discount
   discount-service:
@@ -190,7 +201,8 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 5s
       timeout: 3s
-      retries: 5
+      retries: 10
+      start_period: 20s
 
   discount-db:
     image: postgres:14
@@ -204,7 +216,8 @@ services:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 3s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 20s
 
   # Ticket
   ticket-service:
@@ -222,7 +235,8 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
       interval: 5s
       timeout: 3s
-      retries: 5
+      retries: 10
+      start_period: 20s
   ticket-db:
     image: postgres:14
     environment:
@@ -237,7 +251,8 @@ services:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 3s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 20s
 
   # Notification
   notification-service:
@@ -248,13 +263,15 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:9100/health"]
       interval: 5s
       timeout: 3s
-      retries: 5
+      retries: 10
+      start_period: 20s
 
   # API Gateway
   api-gateway:
     build: ./api-gateway
     ports:
       - "8080:8080"
+    restart: always
     environment:
       - AUTH_SERVICE_URL=http://auth-service:3000
       - FLIGHT_SEARCH_URL=http://flight-search:4000
@@ -285,4 +302,5 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 5s
       timeout: 3s
-      retries: 5
+      retries: 10
+      start_period: 20s
