@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS bookings (
   id SERIAL PRIMARY KEY,
-  user_id UUID NOT NULL,
+  user_id INTEGER NOT NULL,
   flight_id INTEGER NOT NULL,
   seats INTEGER NOT NULL,
   price NUMERIC(10,2),

@@ -22,7 +22,6 @@ export async function seedSeats() {
     }
 
     console.log("✅ Dummy seat data seeded");
-    process.exit();
 }
 
 seedSeats();

@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS payments (
+  id SERIAL PRIMARY KEY,
+  booking_id INTEGER NOT NULL,
+  amount NUMERIC(10,2) NOT NULL,
+  user_id INTEGER NOT NULL,
+  status TEXT NOT NULL
+);

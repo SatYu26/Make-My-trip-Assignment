@@ -136,6 +136,8 @@ services:
       POSTGRES_DB: bookingdb
     ports:
       - "5435:5432"
+    volumes:
+      - ./booking-service/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 3s
@@ -166,6 +168,8 @@ services:
       POSTGRES_DB: paymentdb
     ports:
       - "5436:5432"
+    volumes:
+      - ./payment-service/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 3s
@@ -216,6 +220,21 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
       interval: 5s
       timeout: 3s
+      retries: 5
+  ticket-db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ticketdb
+    ports:
+      - "5439:5432"
+    volumes:
+      - ./ticket-service/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 5s
       retries: 5
 
   # Notification

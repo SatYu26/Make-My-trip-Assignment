@@ -4,7 +4,7 @@ import { verifyAuth } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
-router.post("/bookings", verifyAuth, BookingController.createBooking);
-router.get("/bookings/:id", verifyAuth, BookingController.getBooking);
+router.post("/", verifyAuth, BookingController.createBooking);
+router.get("/:id/:userId", verifyAuth, BookingController.getBooking);
 
 export default router;

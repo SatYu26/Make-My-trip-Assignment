@@ -3,5 +3,5 @@ export interface Payment {
     booking_id: number;
     amount: number;
     status: "SUCCESS" | "FAILED";
-    transaction_id: string;
+    user_id: number;
 }

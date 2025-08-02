@@ -9,7 +9,7 @@ export const getAvailableSeats = async (req: Request, res: Response) => {
 
 export const lockSeat = async (req: Request, res: Response) => {
     const { flightId, seatNumber } = req.body;
-    const userId = (req as any).user?.id || req.body.userId;
+    const userId = req.body.userId || (req as any).user?.id;
 
     if (!userId) return res.status(401).json({ message: "Unauthorized" });
 

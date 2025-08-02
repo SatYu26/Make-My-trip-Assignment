@@ -38,36 +38,43 @@ router.get("/flights/search", (req, res) =>
 );
 
 // Lock seats
-router.get("/seats/:flightId", (req, res) =>
-    forward(req, res, `${process.env.SEAT_SERVICE_URL}/api/seats/:flightId`)
-);
 router.post("/seats/lock", (req, res) =>
     forward(req, res, `${process.env.SEAT_SERVICE_URL}/api/seats/lock`)
 );
 
+router.get("/seats/:flightId", (req, res) =>
+    forward(req, res, `${process.env.SEAT_SERVICE_URL}/api/seats/${req.params.flightId}`)
+);
+
 // Booking
-router.post("/booking/create", (req, res) =>
-    forward(req, res, `${process.env.BOOKING_SERVICE_URL}/api/book`)
+router.post("/bookings/create", (req, res) =>
+    forward(req, res, `${process.env.BOOKING_SERVICE_URL}/api/bookings`)
+);
+router.get("/bookings/:Id/:userId", (req, res) =>
+    forward(req, res, `${process.env.BOOKING_SERVICE_URL}/api/bookings/${req.params.Id}/${req.params.userId}`)
 );
 
 // Payment
-router.post("/payment/charge", (req, res) =>
-    forward(req, res, `${process.env.PAYMENT_SERVICE_URL}/api/pay`)
+router.post("/payments/pay", (req, res) =>
+    forward(req, res, `${process.env.PAYMENT_SERVICE_URL}/api/payments/pay`)
 );
 
 // Discount (optional step)
-router.post("/discount/apply", (req, res) =>
-    forward(req, res, `${process.env.DISCOUNT_SERVICE_URL}/api/discount/apply`)
+router.post("/discounts/apply", (req, res) =>
+    forward(req, res, `${process.env.DISCOUNT_SERVICE_URL}/api/discounts/apply`)
 );
 
 // Ticket
-router.post("/ticket/generate", (req, res) =>
-    forward(req, res, `${process.env.TICKET_SERVICE_URL}/api/ticket`)
+router.post("/tickets/generate", (req, res) =>
+    forward(req, res, `${process.env.TICKET_SERVICE_URL}/api/tickets/generate`)
+);
+router.get("/tickets/:Id", (req, res) =>
+    forward(req, res, `${process.env.TICKET_SERVICE_URL}/api/tickets/${req.params.Id}`)
 );
 
 // Notification
-router.post("/notify", (req, res) =>
-    forward(req, res, `${process.env.NOTIFICATION_SERVICE_URL}/api/notify`)
+router.post("/notifications/send", (req, res) =>
+    forward(req, res, `${process.env.NOTIFICATION_SERVICE_URL}/api/notifications/send`)
 );
 
 export default router;

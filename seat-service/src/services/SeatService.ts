@@ -1,9 +1,11 @@
 import { pool } from "../config/db.js";
 import { redisClient } from "../config/redis.js";
+import { seedSeats } from "../seed/seedSeats.js";
 import { invalidateCache } from "../utils/cacheUtils.js";
 
 export class SeatService {
     static async getAvailableSeats(flightId: number) {
+        await seedSeats();
         const cacheKey = `seats:${flightId}`;
         const cached = await redisClient.get(cacheKey);
 
@@ -22,6 +24,7 @@ export class SeatService {
     }
 
     static async lockSeat(flightId: number, seatNumber: string, userId: string) {
+        await seedSeats();
         await pool.query(
             "UPDATE seats SET is_booked = true, booked_by = $1 WHERE flight_id = $2 AND seat_number = $3 AND is_booked = false",
             [ userId, flightId, seatNumber ]

@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS tickets (
+  id SERIAL PRIMARY KEY,
+  seat_number INTEGER NOT NULL,
+  flight_id INTEGER NOT NULL,
+  price NUMERIC(10,2) NOT NULL,
+  user_id INTEGER NOT NULL,
+  booking_id INTEGER NOT NULL
+);

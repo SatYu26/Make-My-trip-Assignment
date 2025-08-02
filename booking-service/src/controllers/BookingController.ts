@@ -4,10 +4,9 @@ import { verifyAuth } from "../middlewares/authMiddleware.js";
 
 export class BookingController {
     static async createBooking(req: Request, res: Response) {
-        const userId = req.user?.id; // from JWT middleware
-        const { flightId, seats, price } = req.body;
+        const { userId, flightId, seats, price } = req.body;
 
-        if (!flightId || !seats || !price) {
+        if (!userId || !flightId || !seats || !price) {
             return res.status(400).json({ error: "Missing booking details" });
         }
 
@@ -22,7 +21,7 @@ export class BookingController {
 
     static async getBooking(req: Request, res: Response) {
         const bookingId = req.params.id;
-        const userId = req.user?.id;
+        const userId = req.params.userId || req.user?.id;
 
         try {
             const booking = await BookingService.getBooking(bookingId, userId);

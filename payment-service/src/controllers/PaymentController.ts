@@ -4,8 +4,7 @@ import { PaymentService } from "../services/PaymentService.js";
 export class PaymentController {
     static async makePayment(req: Request, res: Response) {
         try {
-            const { bookingId, amount } = req.body;
-            const userId = req.user?.id;
+            const { userId, bookingId, amount } = req.body;
 
             if (!bookingId || !amount) {
                 return res.status(400).json({ error: "bookingId and amount are required" });
