@@ -1,31 +1,29 @@
+import bcrypt from "bcrypt";
 import { pool } from "../config/db.js";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { User } from "../models/User.js";
+import { generateToken } from "../utils/Jwt.js";
 
 export class AuthService {
-    async signup(email: string, password: string): Promise<User> {
-        const hashedPassword = await bcrypt.hash(password, 10);
+    static async signup(email: string, password: string) {
+        const hashed = await bcrypt.hash(password, 10);
         const result = await pool.query(
-            `INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id, email`,
-            [ email, hashedPassword ]
+            `INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id`,
+            [ email, hashed ]
         );
-        return result.rows[ 0 ];
+        const userId = result.rows[ 0 ].id;
+        const token = generateToken(userId);
+        return { token, userId };
     }
 
-    async login(email: string, password: string): Promise<string | null> {
+    static async login(email: string, password: string) {
         const result = await pool.query(`SELECT * FROM users WHERE email = $1`, [ email ]);
+        if (!result.rows.length) throw new Error("User not found");
+
         const user = result.rows[ 0 ];
-
-        if (!user) return null;
-
         const match = await bcrypt.compare(password, user.password);
-        if (!match) return null;
+        if (!match) throw new Error("Invalid credentials");
 
-        const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET!, {
-            expiresIn: "1h",
-        });
-        return token;
+        const token = generateToken(user.id);
+        return { token, userId: user.id };
     }
 
     async initUserTable(): Promise<void> {
@@ -36,3 +34,4 @@ export class AuthService {
     )`);
     }
 }
+

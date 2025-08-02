@@ -1,20 +1,26 @@
 auth-service/
+│
 ├── src/
-│   ├── controllers/
-│   │   └── AuthController.ts
-│   ├── services/
-│   │   └── AuthService.ts
-│   ├── models/
-│   │   └── User.ts
-│   ├── middleware/
-│   │   └── authMiddleware.ts
+│   ├── app.ts
+│   ├── index.ts
 │   ├── config/
 │   │   └── db.ts
+│   ├── controllers/
+│   │   └── AuthController.ts
 │   ├── routes/
-│   │   └── authRoutes.ts
-│   └── app.ts
+│   │   └── auth.routes.ts
+│   ├── services/
+│   │   └── AuthService.ts
+│   ├── middlewares/
+│   │   └── AuthMiddleware.ts
+│   ├── models/
+│   │   └── UserModel.ts
+│   ├── types/
+│   │   └── index.d.ts
+│   └── utils/
+│       └── Jwt.ts
+│
 ├── Dockerfile
-├── docker-compose.yml
 ├── tsconfig.json
 ├── package.json
-└── .env
+└── README.md
