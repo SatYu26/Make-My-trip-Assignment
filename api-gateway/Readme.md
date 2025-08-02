@@ -48,6 +48,3 @@ Example:
 
 ```bash
 npm run test
-```
-
-```
