@@ -2,10 +2,12 @@ import { Request, Response } from "express";
 import { pool } from "../config/db.js";
 import { Pool } from "pg";
 import dotenv from "dotenv";
+import { seedDiscounts } from '../seed/seedDiscounts.js';
 
 dotenv.config();
 
 export const applyDiscount = async (req: Request, res: Response) => {
+    await seedDiscounts();
     const { bookingId, code } = req.body;
 
     if (!bookingId || !code) {
@@ -32,12 +34,12 @@ export const applyDiscount = async (req: Request, res: Response) => {
         [ bookingId ]
     );
 
-    if (!bookingRows.length || bookingRows[ 0 ].status !== 'PAID') {
+    if (!bookingRows.length || bookingRows[ 0 ].status !== 'SUCCESS') {
         return res.status(400).json({ message: "Discount can only be applied after payment." });
     }
 
     // Apply discount
-    const finalAmount = Math.max(0, bookingRows[ 0 ].amount - discount.amount);
+    const finalAmount = Math.max(0, bookingRows[ 0 ].price - discount.amount);
 
     res.json({ message: "Discount applied", finalAmount });
 };

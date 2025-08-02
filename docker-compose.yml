@@ -212,7 +212,9 @@ services:
     ports:
       - "9000:9000"
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@booking-db:5432/bookingdb
+      - DATABASE_URL=postgres://postgres:postgres@ticket-db:5432/ticketdb
+      - BOOKING_DATABASE_URL=postgres://postgres:postgres@booking-db:5432/bookingdb
+      - JWT_SECRET=your_super_secret_key
     depends_on:
       booking-db:
         condition: service_healthy

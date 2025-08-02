@@ -6,7 +6,7 @@ const discounts = [
     { code: "NEW50", amount: 50 },
 ];
 
-async function seedDiscounts() {
+export async function seedDiscounts() {
     await pool.query(`
         CREATE TABLE IF NOT EXISTS discounts (
             id SERIAL PRIMARY KEY,
@@ -25,7 +25,6 @@ async function seedDiscounts() {
     }
 
     console.log("✅ Discounts seeded");
-    process.exit(0);
 }
 
 seedDiscounts();

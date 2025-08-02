@@ -1,7 +1,6 @@
 export interface Discount {
+    id: number;
     code: string;
-    type: "COUPON" | "CARD";
-    value: number; // flat value
-    expires_at: string;
-    usage_limit: number;
+    is_active: boolean;
+    amount: number;
 }

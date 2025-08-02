@@ -26,7 +26,7 @@ export class TicketController {
                 `INSERT INTO tickets (booking_id, user_id, flight_id, seat_number, price)
          VALUES ($1, $2, $3, $4, $5)
          RETURNING *`,
-                [ booking_id, booking.user_id, booking.flight_id, booking.seat_number, booking.price ]
+                [ booking_id, booking.user_id, booking.flight_id, booking.seats, booking.price ]
             );
 
             res.status(201).json(ticketResult.rows[ 0 ]);

@@ -33,6 +33,10 @@ export class PaymentService {
        VALUES ($1, $2, $3, $4)`,
             [ bookingId, userId, amount, "SUCCESS" ]
         );
+        await bookingPool.query(
+            `UPDATE bookings SET status = 'SUCCESS' WHERE id = $1`,
+            [ bookingId ]
+        );
 
         return { message: "Payment successful" };
     }
