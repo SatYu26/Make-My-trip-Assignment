@@ -6,14 +6,15 @@ const router = express.Router();
 
 const forward = async (req: any, res: any, url: string) => {
     try {
+        console.log(`Forwarding request to: ${url}`);
         const response = await axios({
             method: req.method,
             url,
             data: req.body,
             headers: {
-                Authorization: req.headers.authorization,
+                Authorization: req.headers.authorization || "",
                 "Content-Type": "application/json",
-                "x-user-id": req.user.userId,
+                ...(req.user?.userId && { "x-user-id": req.user.userId }),
             },
         });
         res.status(response.status).json(response.data);
@@ -21,6 +22,13 @@ const forward = async (req: any, res: any, url: string) => {
         res.status(err?.response?.status || 500).json(err?.response?.data || { error: "Upstream error" });
     }
 };
+
+router.post("/auth/signup", (req, res) =>
+    forward(req, res, `${process.env.AUTH_SERVICE_URL}/api/auth/signup`)
+);
+router.post("/auth/login", (req, res) =>
+    forward(req, res, `${process.env.AUTH_SERVICE_URL}/api/auth/login`)
+);
 
 router.use(authenticate);
 
@@ -30,6 +38,9 @@ router.get("/flights/search", (req, res) =>
 );
 
 // Lock seats
+router.get("/seats/:flightId", (req, res) =>
+    forward(req, res, `${process.env.SEAT_SERVICE_URL}/api/seats/:flightId`)
+);
 router.post("/seats/lock", (req, res) =>
     forward(req, res, `${process.env.SEAT_SERVICE_URL}/api/seats/lock`)
 );
