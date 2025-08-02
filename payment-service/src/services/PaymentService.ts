@@ -1,9 +1,15 @@
 import { pool } from "../config/db.js";
+import { Pool } from "pg";
+import dotenv from "dotenv";
 
+dotenv.config();
 export class PaymentService {
     static async processPayment(bookingId: string, userId: string, amount: number) {
         // Validate booking exists and belongs to user
-        const result = await pool.query(
+        const bookingPool = new Pool({
+            connectionString: process.env.BOOKING_DATABASE_URL,
+        });
+        const result = await bookingPool.query(
             `SELECT * FROM bookings WHERE id = $1 AND user_id = $2`,
             [ bookingId, userId ]
         );

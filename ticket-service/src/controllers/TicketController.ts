@@ -1,14 +1,20 @@
 import { Request, Response } from "express";
 import { pool } from "../config/db.js";
 import jwt from "jsonwebtoken";
+import { Pool } from "pg";
+import dotenv from "dotenv";
 
+dotenv.config();
 export class TicketController {
     static async generateTicket(req: Request, res: Response) {
         const { booking_id } = req.body;
         if (!booking_id) return res.status(400).json({ message: "Missing booking_id" });
 
         try {
-            const result = await pool.query(
+            const bookingPool = new Pool({
+                connectionString: process.env.BOOKING_DATABASE_URL,
+            });
+            const result = await bookingPool.query(
                 `SELECT * FROM bookings WHERE id = $1`,
                 [ booking_id ]
             );

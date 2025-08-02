@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
 import { pool } from "../config/db.js";
+import { Pool } from "pg";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const applyDiscount = async (req: Request, res: Response) => {
     const { bookingId, code } = req.body;
@@ -20,7 +24,10 @@ export const applyDiscount = async (req: Request, res: Response) => {
     const discount = discountRows[ 0 ];
 
     // Simulate booking status validation (to restrict flow)
-    const { rows: bookingRows } = await pool.query(
+    const bookingPool = new Pool({
+        connectionString: process.env.BOOKING_DATABASE_URL,
+    });
+    const { rows: bookingRows } = await bookingPool.query(
         `SELECT status FROM bookings WHERE id = $1`,
         [ bookingId ]
     );
