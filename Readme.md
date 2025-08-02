@@ -120,91 +120,146 @@ NOTIFICATION_SERVICE_URL=http://notification-service:9100
 
 ---
 
-## 🧪 API Flow — Full Booking Journey
+## 🧪 API Flow — Full Booking Journey (via Postman)
 
-Here’s a step-by-step simulation using Postman or cURL:
+Below is a complete end-to-end simulation of a flight booking using Postman or cURL. All APIs are routed via the **API Gateway** (`http://localhost:8080`):
 
 1. **Signup**
 
    ```
-   POST http://localhost:8080/api/auth/signup
-   { "name": "John", "email": "john@example.com", "password": "test123" }
+   POST /api/auth/signup
+   Content-Type: application/json
+
+   {
+     "name": "John",
+     "email": "john@example.com",
+     "password": "test123"
+   }
    ```
 
 2. **Login**
 
    ```
-   POST http://localhost:8080/api/auth/login
-   { "email": "john@example.com", "password": "test123" }
-   → returns token & userId
+   POST /api/auth/login
+   Content-Type: application/json
+
+   {
+     "email": "john@example.com",
+     "password": "test123"
+   }
    ```
+
+   > 🔐 Returns a **JWT token** and `userId`. Use the token in all further requests as:
+   > `Authorization: Bearer <token>`
 
 3. **Search Flights**
 
    ```
-   GET http://localhost:8080/api/flights/search?source=DEL&destination=BLR&date=2025-08-10
+   GET /api/flights/search?source=DEL&destination=BOM&date=2025-08-05
    Authorization: Bearer <token>
    ```
 
-4. **Lock Seats**
+4. **Check Available Seats**
 
    ```
-   POST http://localhost:8080/api/seats/lock
+   GET /api/seats/1
+   Authorization: Bearer <token>
+   ```
+
+5. **Lock a Seat**
+
+   ```
+   POST /api/seats/lock
+   Authorization: Bearer <token>
+   Content-Type: application/json
+
    {
-     "flight_id": 1,
-     "user_id": 10,
-     "num_seats": 2
-   }
-   ```
-
-5. **Apply Discount**
-
-   ```
-   POST http://localhost:8080/api/discounts/validate
-   {
-     "code": "FLY50"
+     "flightId": 1,
+     "userId": 1,
+     "seatNumber": "A1"
    }
    ```
 
 6. **Create Booking**
 
    ```
-   POST http://localhost:8080/api/bookings/create
+   POST /api/bookings/create
+   Authorization: Bearer <token>
+   Content-Type: application/json
+
    {
-     "flight_id": 1,
-     "user_id": 10,
-     "num_seats": 2
+     "userId": 1,
+     "flightId": 1,
+     "price": 5000,
+     "seats": 2
    }
    ```
 
-7. **Make Payment**
+7. **Get Booking Details**
 
    ```
-   POST http://localhost:8080/api/payments/initiate
+   GET /api/bookings/1/1
+   Authorization: Bearer <token>
+   ```
+
+8. **Initiate Payment**
+
+   ```
+   POST /api/payments/pay
+   Authorization: Bearer <token>
+   Content-Type: application/json
+
    {
-     "booking_id": 123,
-     "amount": 5000
+     "bookingId": 1,
+     "amount": 5000,
+     "userId": 1
    }
    ```
 
-8. **Generate Ticket**
+9. **Apply Discount Code (Optional)**
 
    ```
-   POST http://localhost:8080/api/tickets/generate
+   POST /api/discounts/apply
+   Authorization: Bearer <token>
+   Content-Type: application/json
+
    {
-     "booking_id": 123
+     "bookingId": 1,
+     "code": "FLY100"
    }
    ```
 
-9. **Send Notification**
+10. **Generate Ticket**
 
-   ```
-   POST http://localhost:8080/api/notifications/send
-   {
-     "user_id": 10,
-     "message": "Your booking is confirmed!"
-   }
-   ```
+```
+POST /api/tickets/generate
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "booking_id": 1
+}
+```
+
+11. **Get Ticket**
+
+```
+GET /api/tickets/1
+Authorization: Bearer <token>
+```
+
+12. **Send Notification**
+
+```
+POST /api/notifications/send
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "message": "ticket booked"
+}
+```
 
 ---
 
