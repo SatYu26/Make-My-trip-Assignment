@@ -1,88 +1,88 @@
-# ✈️ Flight Booking System (MakeMyTrip-like) — Microservices Architecture
+# ✈️ Flight Booking System — Microservices Architecture
 
-A modular, production-grade backend system to search flights, book tickets, lock seats, process payments, apply discounts, generate invoices, and send notifications.
+A modular, scalable backend system for searching flights, locking seats, creating bookings, processing payments, applying discounts, generating tickets/invoices, and sending notifications.
 
-Built with **TypeScript + Node.js + PostgreSQL + Redis**, following **clean class-based LLD**, fully containerized with **Docker Compose**, and routed through a central **API Gateway**.
+Built using **TypeScript**, **Node.js**, **PostgreSQL**, and **Redis**, with clean class-based architecture, secure JWT auth, Redis caching, and containerized using Docker Compose.
 
 ---
 
 ## 📌 System Purpose
 
-This project simulates the backend of a flight booking platform like MakeMyTrip or ClearTrip. It consists of 9 decoupled microservices that handle:
+This is a complete backend for a flight booking platform (like MakeMyTrip). It includes 9 decoupled microservices handling:
 
 - Authentication
-- Flight search (with up to 2 hops)
+- Flight search (supports 2-hop logic)
 - Seat inventory & locking
-- Booking
-- Payments (mocked)
-- Discounts
-- Ticketing
-- Notifications
-- Central API Gateway
+- Booking system
+- Payment gateway (mock)
+- Discount validation
+- Ticket & Invoice generation
+- Notification dispatch (mock)
+- Centralized API Gateway
 
 ---
 
 ## 🧱 Tech Stack
 
-| Layer             | Stack                         |
-|------------------|-------------------------------|
-| Language          | TypeScript                    |
-| Runtime           | Node.js                       |
-| API Framework     | Express.js                    |
-| DB                | PostgreSQL                    |
-| Cache             | Redis                         |
-| Containerization  | Docker + Docker Compose       |
-| Auth              | JWT                           |
+| Layer             | Stack                          |
+|------------------|--------------------------------|
+| Language          | TypeScript                     |
+| Runtime           | Node.js                        |
+| API Framework     | Express.js                     |
+| Database          | PostgreSQL                     |
+| Cache             | Redis                          |
+| Auth              | JWT (JSON Web Token)           |
+| Containerization  | Docker + Docker Compose        |
 
 ---
 
 ## 🧩 Architecture Overview
 
-
 <img src="https://github.com/SatYu26/Make-My-trip-Assignment/blob/main/mmt.png" alt="System Design" style="float: left; margin-right: 20px;" />
 
 
 ```text
-           [ Client / Postman ]
-                    │
-              ┌────────────┐
-              │ API Gateway│  ← http://localhost:8080
-              └─────┬──────┘
+            [ Client / Postman ]
+                     │
+               ┌────────────┐
+               │ API Gateway│ ← http://localhost:8080
+               └─────┬──────┘
      ┌────────────┬────────────┬────────────┬────────────┬────────────┐
      │ Auth       │ Flight     │ Seat       │ Booking    │ Ticket     │
      │ Service    │ Search     │ Inventory  │ Service    │ Service    │
      └────────────┴─────┬──────┴────┬───────┴──────┬─────┴────────────┘
                         │           │              │
-                    Payment     Discount     Notification
-                    Service     Service         Service
+                   Payment      Discount      Notification
+                   Service      Service         Service
 ````
 
 ---
 
-## 📁 Services and Ports
+## 📁 Microservices and Port Map
 
-| Service            | Description                        | Port |
-| ------------------ | ---------------------------------- | ---- |
-| `auth-service`     | Signup, login, token auth          | 3000 |
-| `flight-search`    | Search direct and 2-hop flights    | 4000 |
-| `seat-service`     | Lock seats in Redis, confirm in DB | 5000 |
-| `booking-service`  | Store bookings, passengers         | 6000 |
-| `payment-service`  | Simulate external payments         | 7000 |
-| `discount-service` | Validate discount codes            | 8000 |
-| `ticket-service`   | Generate ticket & invoice          | 9000 |
-| `notification`     | Simulate SMS/email                 | 9100 |
-| `api-gateway`      | Central routing for all services   | 8080 |
+| Service            | Description                       | Port |
+| ------------------ | --------------------------------- | ---- |
+| `auth-service`     | Signup, login, JWT authentication | 3000 |
+| `flight-search`    | Direct & 2-hop flight search      | 4000 |
+| `seat-service`     | Lock and confirm seats via Redis  | 5000 |
+| `booking-service`  | Booking flow management           | 6000 |
+| `payment-service`  | Simulate payments, update status  | 7000 |
+| `discount-service` | Validate discount tokens          | 8000 |
+| `ticket-service`   | Generate ticket + invoice         | 9000 |
+| `notification`     | Mock SMS/email notifications      | 9100 |
+| `api-gateway`      | Central entrypoint & routing      | 8080 |
 
 ---
 
-## 🚀 Setup Instructions
+## 🚀 Getting Started
 
 ### 1. Prerequisites
 
 * Node.js ≥ 18
-* Docker + Docker Compose
+* Docker and Docker Compose
+* `.env` files (see below)
 
-### 2. Clone & Start the System
+### 2. Clone and Run
 
 ```bash
 git clone <repo-url>
@@ -90,85 +90,170 @@ cd flight-booking-system
 docker compose up --build
 ```
 
-This will boot all services in one go.
+This starts all 9 services, Postgres DBs, and Redis via Docker Compose.
 
 ---
 
-## 🧪 API Flow — Full User Journey
+## 🔐 .env Configuration
 
-Here’s how you can simulate a complete flight booking in Postman:
+Each service contains a `.env` file. Most include:
 
-1. **Signup:**
-   `POST http://localhost:8080/api/auth/signup`
-   `{ "email": "test@user.com", "password": "123456" }`
+```env
+PORT=XXXX
+DATABASE_URL=postgres://postgres:postgres@<db-service>:5432/<dbname>
+JWT_SECRET=your-secret (for auth-service only)
+REDIS_URL=redis://redis:6379 (for flight-search and seat-service)
+```
 
-2. **Login:**
-   `POST http://localhost:8080/api/auth/login`
-   ⇒ returns JWT token
+The `api-gateway` also includes:
 
-3. **Search Flights:**
-   `GET http://localhost:8080/api/flights/search?src=DEL&dest=BLR`
-
-4. **Lock Seats:**
-   `POST http://localhost:8080/api/seats/lock`
-   `{ "flightId": "AI101", "seats": ["1A", "1B"] }`
-
-5. **Apply Discount:**
-   `POST http://localhost:8080/api/discounts/apply`
-   `{ "code": "FLY50", "amount": 5000 }`
-
-6. **Create Booking:**
-   `POST http://localhost:8080/api/bookings/create`
-   `{ "flightId": "AI101", "passengers": [...] }`
-
-7. **Pay:**
-   `POST http://localhost:8080/api/payments/pay`
-   `{ "bookingId": "bk_001", "amount": 5000 }`
-
-8. **Generate Ticket:**
-   `GET http://localhost:8080/api/tickets/bk_001`
-
-9. **Send Notification:**
-   `POST http://localhost:8080/api/notify/send`
-   `{ "to": "test@user.com", "message": "Ticket confirmed" }`
-
-All routes above are accessible through:
-`http://localhost:8080/api/...`
+```env
+AUTH_SERVICE_URL=http://auth-service:3000
+FLIGHT_SEARCH_URL=http://flight-search:4000
+SEAT_SERVICE_URL=http://seat-service:5000
+BOOKING_SERVICE_URL=http://booking-service:6000
+PAYMENT_SERVICE_URL=http://payment-service:7000
+DISCOUNT_SERVICE_URL=http://discount-service:8000
+TICKET_SERVICE_URL=http://ticket-service:9000
+NOTIFICATION_SERVICE_URL=http://notification-service:9100
+```
 
 ---
 
-## 🧰 Folder Structure
+## 🧪 API Flow — Full Booking Journey
 
-```bash
+Here’s a step-by-step simulation using Postman or cURL:
+
+1. **Signup**
+
+   ```
+   POST http://localhost:8080/api/auth/signup
+   { "name": "John", "email": "john@example.com", "password": "test123" }
+   ```
+
+2. **Login**
+
+   ```
+   POST http://localhost:8080/api/auth/login
+   { "email": "john@example.com", "password": "test123" }
+   → returns token & userId
+   ```
+
+3. **Search Flights**
+
+   ```
+   GET http://localhost:8080/api/flights/search?source=DEL&destination=BLR&date=2025-08-10
+   Authorization: Bearer <token>
+   ```
+
+4. **Lock Seats**
+
+   ```
+   POST http://localhost:8080/api/seats/lock
+   {
+     "flight_id": 1,
+     "user_id": 10,
+     "num_seats": 2
+   }
+   ```
+
+5. **Apply Discount**
+
+   ```
+   POST http://localhost:8080/api/discounts/validate
+   {
+     "code": "FLY50"
+   }
+   ```
+
+6. **Create Booking**
+
+   ```
+   POST http://localhost:8080/api/bookings/create
+   {
+     "flight_id": 1,
+     "user_id": 10,
+     "num_seats": 2
+   }
+   ```
+
+7. **Make Payment**
+
+   ```
+   POST http://localhost:8080/api/payments/initiate
+   {
+     "booking_id": 123,
+     "amount": 5000
+   }
+   ```
+
+8. **Generate Ticket**
+
+   ```
+   POST http://localhost:8080/api/tickets/generate
+   {
+     "booking_id": 123
+   }
+   ```
+
+9. **Send Notification**
+
+   ```
+   POST http://localhost:8080/api/notifications/send
+   {
+     "user_id": 10,
+     "message": "Your booking is confirmed!"
+   }
+   ```
+
+---
+
+## 📦 Folder Structure
+
+```
 flight-booking-system/
-├── api-gateway/
 ├── auth-service/
-├── booking-service/
-├── discount-service/
 ├── flight-search-service/
-├── notification-service/
-├── payment-service/
 ├── seat-service/
+├── booking-service/
+├── payment-service/
+├── discount-service/
 ├── ticket-service/
+├── notification-service/
+├── api-gateway/
 ├── docker-compose.yml
 └── README.md
 ```
 
 ---
 
-## 🔐 Security Notes
+## 📌 Caching & Invalidation
 
-* JWT-based authentication
-* All protected endpoints check `Authorization: Bearer <token>`
-* Redis used to avoid race conditions in seat locking
-* Services are stateless and scalable independently
+* Flight search results are cached in Redis
+* Cache is invalidated if:
+
+  1. Flight has already departed
+  2. Flight is in the cancelled list
+  3. Flight is fully booked
 
 ---
 
-## 🔧 Production Suggestions
+## 🔐 Security & Flow Constraints
 
-* Use HTTPS with TLS termination at the gateway
-* Add monitoring/logging (Prometheus + Grafana)
-* Persist Redis data with Redis AOF or RDB in production
-* Add retries + circuit breakers for downstream calls
-* Run DB and Redis as managed services (e.g., GCP Cloud SQL, Memorystore)
+* Every service (except signup/login) checks for valid JWT
+* Booking flow is strictly linear:
+
+  1. Search → Lock → Booking → Pay → Ticket
+  2. Discount is optional, all else is mandatory
+* Redis ensures race-free seat locking
+
+---
+
+## 🧰 Production Recommendations
+
+* Reverse proxy: NGINX or Traefik in front of API Gateway
+* Use HTTPS (TLS termination at gateway)
+* Run Redis/Postgres as managed services (e.g., GCP Cloud SQL, Memorystore)
+* Add retry logic and exponential backoff for network calls
+* Add monitoring (Prometheus + Grafana)
+* Structured logging (e.g., Winston + FluentBit)
