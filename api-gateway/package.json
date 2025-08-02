@@ -1,12 +1,12 @@
 {
   "name": "api-gateway",
   "version": "1.0.0",
-  "main": "dist/app.js",
+  "main": "dist/server.js",
   "type": "module",
   "scripts": {
-    "dev": "ts-node-dev --respawn src/app.ts",
+    "dev": "ts-node-dev --respawn src/server.ts",
     "build": "tsc",
-    "start": "node dist/app.js"
+    "start": "node dist/server.js"
   },
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.10",

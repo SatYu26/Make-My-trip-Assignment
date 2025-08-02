@@ -1,13 +1,12 @@
 {
   "name": "payment-service",
   "version": "1.0.0",
-  "main": "dist/app.js",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "dev": "ts-node-dev --respawn src/app.ts",
+    "dev": "ts-node-dev --respawn src/index.ts",
     "build": "tsc",
-    "start": "node dist/app.js",
-    "seed": "ts-node src/seed/seedFlights.ts"
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "dotenv": "^16.3.1",

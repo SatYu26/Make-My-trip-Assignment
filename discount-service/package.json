@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "node dist/app.js",
-    "seed": "tsc && node dist/seed/seedDiscounts.js"
+    "seed": "tsc && node dist/seed/seedDiscounts.js",
+    "build": "tsc"
   },
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.10",
