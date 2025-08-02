@@ -99,37 +99,37 @@ This will boot all services in one go.
 Here’s how you can simulate a complete flight booking in Postman:
 
 1. **Signup:**
-   `POST /api/auth/signup`
+   `POST http://localhost:8080/api/auth/signup`
    `{ "email": "test@user.com", "password": "123456" }`
 
 2. **Login:**
-   `POST /api/auth/login`
+   `POST http://localhost:8080/api/auth/login`
    ⇒ returns JWT token
 
 3. **Search Flights:**
-   `GET /api/flights/search?src=DEL&dest=BLR`
+   `GET http://localhost:8080/api/flights/search?src=DEL&dest=BLR`
 
 4. **Lock Seats:**
-   `POST /api/seats/lock`
+   `POST http://localhost:8080/api/seats/lock`
    `{ "flightId": "AI101", "seats": ["1A", "1B"] }`
 
 5. **Apply Discount:**
-   `POST /api/discounts/apply`
+   `POST http://localhost:8080/api/discounts/apply`
    `{ "code": "FLY50", "amount": 5000 }`
 
 6. **Create Booking:**
-   `POST /api/bookings/create`
+   `POST http://localhost:8080/api/bookings/create`
    `{ "flightId": "AI101", "passengers": [...] }`
 
 7. **Pay:**
-   `POST /api/payments/pay`
+   `POST http://localhost:8080/api/payments/pay`
    `{ "bookingId": "bk_001", "amount": 5000 }`
 
 8. **Generate Ticket:**
-   `GET /api/tickets/bk_001`
+   `GET http://localhost:8080/api/tickets/bk_001`
 
 9. **Send Notification:**
-   `POST /api/notify/send`
+   `POST http://localhost:8080/api/notify/send`
    `{ "to": "test@user.com", "message": "Ticket confirmed" }`
 
 All routes above are accessible through:
