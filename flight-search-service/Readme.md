@@ -1,69 +1,71 @@
-# 🛫 Flight Search Service
+# Flight Search Service
 
-Returns direct and connecting flights (up to 2 hops) between cities.
+Provides available flights with real-time seat availability.
 
----
+## Features
 
-## 📌 Purpose
+- Fetch flights (with caching via Redis)
+- Cache invalidation on:
+  - Departure passed
+  - Flight canceled
+  - Flight fully booked
 
-- Search direct or 1-stop flights using 2-hop BFS
-- Store flight routes in PostgreSQL
-- Expose GET endpoint to retrieve flights between cities
+## Tech Stack
 
----
-
-## 🧰 Tech Stack
-
-- Node.js + TypeScript
+- Node.js
 - Express.js
 - PostgreSQL
+- Redis
 
----
+## Environment Variables
 
-## 🚀 Setup Instructions
+| Variable       | Description                          |
+|----------------|--------------------------------------|
+| `PORT`         | Port to run the server (default 4000)|
+| `DATABASE_URL` | PostgreSQL connection string         |
+| `REDIS_URL`    | Redis connection string              |
 
-```bash
-cd flight-search-service
-npm install
-npm run dev
+## API Endpoints
+
+### GET /api/flights/search?source=DEL&destination=BLR&date=2025-08-10
+
+Returns matching flights with available seat counts.
+
+**Headers:**
 ````
 
-### Environment Variables
+Authorization: Bearer \<JWT\_TOKEN>
 
-```
-PORT=4000
-DATABASE_URL=postgres://user:pass@host:port/db
-```
-
----
-
-## 🔗 API Endpoints
-
-### ✅ GET `/search?src=DEL&dest=BLR`
-
-Returns all direct or one-stop flight paths.
+````
 
 **Response:**
-
 ```json
 [
   {
-    "path": ["DEL", "BLR"],
-    "flights": [{ "flightId": "AI101", ... }]
-  },
-  {
-    "path": ["DEL", "BOM", "BLR"],
-    "flights": [
-      { "flightId": "AI301", ... },
-      { "flightId": "AI789", ... }
-    ]
+    "flight_id": 1,
+    "flight_number": "AI105",
+    "source": "DEL",
+    "destination": "BLR",
+    "departure_time": "06:00",
+    "arrival_time": "08:30",
+    "date": "2025-08-10",
+    "available_seats": 10
   }
 ]
+````
+
+## Setup
+
+```bash
+npm install
+npm run build
+npm start
 ```
 
----
+## Testing
 
-## 🧪 How to Test
+```bash
+npm run test
+```
 
-1. Seed database with sample flight data
-2. Run: `GET /search?src=DEL&dest=BLR`
+````

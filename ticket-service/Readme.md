@@ -1,55 +1,66 @@
-# 🎫 Ticket Service
+# Ticket & Invoice Service
 
-Generates invoices and ticket details post booking/payment.
+Generates final ticket and invoice after booking + payment.
 
----
+## Features
 
-## 📌 Purpose
+- Generate downloadable ticket
+- Create invoice records
 
-- Store ticket record
-- Return final invoice with passenger list and payment info
+## Tech Stack
 
----
-
-## 🧰 Tech Stack
-
-- Node.js + TypeScript
+- Node.js
 - Express.js
 - PostgreSQL
 
----
+## Environment Variables
 
-## 🚀 Setup Instructions
+| Variable       | Description                          |
+|----------------|--------------------------------------|
+| `PORT`         | Port to run the server (9000)        |
+| `DATABASE_URL` | PostgreSQL connection string         |
 
-```bash
-cd ticket-service
-npm install
-npm run dev
+## API Endpoints
+
+### POST /api/tickets/generate
+
+Generates a ticket after booking confirmation.
+
+**Headers:**
 ````
 
----
+Authorization: Bearer \<JWT\_TOKEN>
 
-## 🔗 API Endpoints
+````
 
-### ✅ GET `/ticket/:bookingId`
+**Request:**
+```json
+{
+  "booking_id": 123
+}
+````
 
 **Response:**
 
 ```json
 {
-  "bookingId": "bk_001",
-  "flightId": "AI101",
-  "passengers": [
-    { "name": "Alice" },
-    { "name": "Bob" }
-  ],
-  "totalAmount": 4580,
-  "transactionId": "txn_12345"
+  "ticket_id": "TICK-456",
+  "pdf_url": "/tickets/TICK-456.pdf"
 }
 ```
 
----
+## Setup
 
-## 🧪 How to Test
+```bash
+npm install
+npm run build
+npm start
+```
 
-Use `GET /ticket/:bookingId` after booking and payment
+## Testing
+
+```bash
+npm run test
+```
+
+````

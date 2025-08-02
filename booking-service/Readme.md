@@ -1,74 +1,70 @@
-# 📦 Booking Service
+# Booking Service
 
-Creates and stores complete bookings and passenger details.
+Handles booking creation and flow management.
 
----
+## Features
 
-## 📌 Purpose
+- Create booking record
+- Interact with seat service to lock seats
+- Maintain booking flow state
 
-- Store booking metadata
-- Link bookings with users and flights
-- Track booking status
+## Tech Stack
 
----
-
-## 🧰 Tech Stack
-
-- Node.js + TypeScript
+- Node.js
 - Express.js
 - PostgreSQL
 
----
+## Environment Variables
 
-## 🚀 Setup Instructions
+| Variable             | Description                     |
+|----------------------|---------------------------------|
+| `PORT`               | Port to run the server (6000)   |
+| `DATABASE_URL`       | PostgreSQL connection string    |
+| `SEAT_SERVICE_URL`   | Internal URL to seat service    |
 
-```bash
-cd booking-service
-npm install
-npm run dev
+## API Endpoints
+
+### POST /api/bookings/create
+
+Creates a booking entry.
+
+**Headers:**
 ````
 
-### Environment Variables
+Authorization: Bearer \<JWT\_TOKEN>
 
-```
-PORT=6000
-DATABASE_URL=postgres://user:pass@host:port/db
-```
-
----
-
-## 🔗 API Endpoints
-
-### ✅ POST `/create`
-
-Creates a booking with passenger data.
+````
 
 **Request:**
-
 ```json
 {
-  "userId": "u123",
-  "flightId": "AI101",
-  "seats": ["1A", "1B"],
-  "passengers": [
-    { "name": "Alice", "age": 28 },
-    { "name": "Bob", "age": 32 }
-  ]
+  "flight_id": 1,
+  "user_id": 10,
+  "num_seats": 2
 }
-```
+````
 
 **Response:**
 
 ```json
 {
-  "bookingId": "bk_001",
-  "message": "Booking created"
+  "booking_id": 123,
+  "status": "PENDING"
 }
 ```
 
----
+## Setup
 
-## 🧪 How to Test
+```bash
+npm install
+npm run build
+npm start
+```
 
-1. Confirm seats via seat service
-2. Send booking details to `/create`
+## Testing
+
+```bash
+npm run test
+```
+
+````

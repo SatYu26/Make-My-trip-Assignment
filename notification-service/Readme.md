@@ -1,56 +1,52 @@
-# 📩 Notification Service
+# Notification Service
 
-Simulates sending email or SMS for ticket confirmation.
+Sends notifications to users via email/SMS (mocked).
 
----
+## Features
 
-## 📌 Purpose
+- Send booking/ticket notifications
 
-- Simulate message/email delivery
-- Log notification request
+## Tech Stack
 
----
-
-## 🧰 Tech Stack
-
-- Node.js + TypeScript
+- Node.js
 - Express.js
 
----
+## Environment Variables
 
-## 🚀 Setup Instructions
+None needed for now.
 
-```bash
-cd notification-service
-npm install
-npm run dev
-````
+## API Endpoints
 
----
-
-## 🔗 API Endpoints
-
-### ✅ POST `/send`
+### POST /api/notifications/send
 
 **Request:**
-
 ```json
 {
-  "to": "user@example.com",
-  "message": "Your ticket is confirmed"
+  "user_id": 10,
+  "message": "Your ticket has been issued!"
 }
-```
+````
 
 **Response:**
 
 ```json
 {
-  "status": "delivered"
+  "status": "sent"
 }
 ```
 
----
+## Setup
 
-## 🧪 How to Test
+```bash
+npm install
+npm run build
+npm start
+```
 
-Call `/send` with mock payload
+## Testing
+
+```bash
+npm run test
+```
+
+````

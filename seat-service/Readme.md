@@ -1,80 +1,70 @@
-# 💺 Seat Service
+# Seat Inventory Service
 
-Locks seats temporarily using Redis and confirms them via DB.
+Handles seat locking and confirming for flights.
 
----
+## Features
 
-## 📌 Purpose
+- Lock seats temporarily
+- Confirm seats after payment
+- Redis-based concurrency
 
-- Lock seats for 10 minutes using Redis TTL
-- Confirm seat bookings by writing to DB
+## Tech Stack
 
----
-
-## 🧰 Tech Stack
-
-- Node.js + TypeScript
+- Node.js
 - Express.js
-- Redis
 - PostgreSQL
+- Redis
 
----
+## Environment Variables
 
-## 🚀 Setup Instructions
+| Variable       | Description                          |
+|----------------|--------------------------------------|
+| `PORT`         | Port to run the server (default 5000)|
+| `DATABASE_URL` | PostgreSQL connection string         |
+| `REDIS_URL`    | Redis connection string              |
 
-```bash
-cd seat-service
-npm install
-npm run dev
+## API Endpoints
+
+### POST /api/seats/lock
+
+Temporarily locks seats for a booking.
+
+**Headers:**
 ````
 
-### Environment Variables
+Authorization: Bearer \<JWT\_TOKEN>
 
-```
-PORT=5000
-REDIS_URL=redis://localhost:6379
-DATABASE_URL=postgres://user:pass@host:port/db
-```
-
----
-
-## 🔗 API Endpoints
-
-### ✅ POST `/lock`
-
-Temporarily locks selected seats.
+````
 
 **Request:**
-
 ```json
 {
-  "flightId": "AI101",
-  "userId": "u123",
-  "seats": ["1A", "1B"]
+  "flight_id": 1,
+  "user_id": 10,
+  "num_seats": 2
 }
-```
+````
 
 **Response:**
 
 ```json
 {
-  "message": "Seats locked for 10 minutes"
+  "message": "Seats locked successfully",
+  "flight_id": 1
 }
 ```
 
----
+### POST /api/seats/confirm
 
-### ✅ POST `/confirm`
-
-Marks seats as booked in the database.
+Confirms seats after successful payment.
 
 **Request:**
 
 ```json
 {
-  "flightId": "AI101",
-  "userId": "u123",
-  "seats": ["1A", "1B"]
+  "flight_id": 1,
+  "user_id": 10,
+  "booking_id": 123
 }
 ```
 
@@ -86,9 +76,18 @@ Marks seats as booked in the database.
 }
 ```
 
----
+## Setup
 
-## 🧪 How to Test
+```bash
+npm install
+npm run build
+npm start
+```
 
-1. Lock seats → `POST /lock`
-2. Confirm them → `POST /confirm`
+## Testing
+
+```bash
+npm run test
+```
+
+````

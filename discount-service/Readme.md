@@ -1,69 +1,66 @@
-# 🎟️ Discount Service
+# Discount Service
 
-Applies and validates coupon codes and offers.
+Handles discount code validation.
 
----
+## Features
 
-## 📌 Purpose
+- Validate discount tokens
+- Seeded dummy discount codes
 
-- Validate discount codes or bank offers
-- Return applicable discount amount
+## Tech Stack
 
----
-
-## 🧰 Tech Stack
-
-- Node.js + TypeScript
+- Node.js
 - Express.js
 - PostgreSQL
 
----
+## Environment Variables
 
-## 🚀 Setup Instructions
+| Variable       | Description                          |
+|----------------|--------------------------------------|
+| `PORT`         | Port to run the server (8000)        |
+| `DATABASE_URL` | PostgreSQL connection string         |
 
-```bash
-cd discount-service
-npm install
-npm run dev
+## API Endpoints
+
+### POST /api/discounts/validate
+
+Validates a given discount code.
+
+**Headers:**
 ````
 
----
+Authorization: Bearer \<JWT\_TOKEN>
 
-## 🔗 API Endpoints
-
-### ✅ POST `/apply`
+````
 
 **Request:**
-
 ```json
 {
-  "userId": "u123",
-  "code": "FLY50",
-  "amount": 5000
+  "code": "DISCOUNT50"
 }
-```
+````
 
 **Response:**
 
 ```json
 {
   "valid": true,
-  "discount": 500
+  "percent": 50
 }
 ```
 
-*(OR)*
+## Setup
 
-```json
-{
-  "valid": false,
-  "discount": 0,
-  "reason": "Invalid or expired coupon"
-}
+```bash
+npm install
+npm run build
+npm start
 ```
 
----
+## Testing
 
-## 🧪 How to Test
+```bash
+npm run test
+```
 
-Send coupon code and base amount to `/apply`
+````

@@ -1,58 +1,42 @@
-# 🔐 Auth Service
+# Auth Service
 
-Handles user authentication and JWT token issuance.
+Handles user registration and login.
 
----
+## Features
 
-## 📌 Purpose
+- User Signup and Login
+- JWT Authentication
+- PostgreSQL-based persistence
 
-- Register users securely
-- Authenticate users and return access tokens
-- Validate access tokens in downstream services
+## Tech Stack
 
----
-
-## 🧰 Tech Stack
-
-- Node.js + TypeScript
+- Node.js
 - Express.js
 - PostgreSQL
 - JWT
 
----
+## Environment Variables
 
-## 🚀 Setup Instructions
+| Variable       | Description                          |
+|----------------|--------------------------------------|
+| `PORT`         | Port to run the server (default 3000)|
+| `DATABASE_URL` | PostgreSQL connection string         |
+| `JWT_SECRET`   | Secret for signing JWT tokens        |
 
-```bash
-cd auth-service
-npm install
-npm run dev
-````
+## API Endpoints
 
-### Environment Variables
-
-```
-PORT=3000
-JWT_SECRET=your-secret
-DATABASE_URL=postgres://user:pass@host:port/db
-```
-
----
-
-## 🔗 API Endpoints
-
-### ✅ POST `/signup`
+### POST /api/auth/signup
 
 Registers a new user.
 
 **Request:**
-
 ```json
 {
-  "email": "user@example.com",
-  "password": "secure123"
+  "name": "Alice",
+  "email": "alice@example.com",
+  "password": "securepassword"
 }
-```
+````
 
 **Response:**
 
@@ -62,18 +46,16 @@ Registers a new user.
 }
 ```
 
----
+### POST /api/auth/login
 
-### ✅ POST `/login`
-
-Returns a JWT token for a valid user.
+Logs in an existing user.
 
 **Request:**
 
 ```json
 {
-  "email": "user@example.com",
-  "password": "secure123"
+  "email": "alice@example.com",
+  "password": "securepassword"
 }
 ```
 
@@ -81,35 +63,23 @@ Returns a JWT token for a valid user.
 
 ```json
 {
-  "token": "<jwt_token>"
+  "token": "JWT_TOKEN_HERE",
+  "userId": "1"
 }
 ```
 
----
+## Setup
 
-### ✅ GET `/verify-token`
-
-Verifies token and returns payload.
-
-**Headers:**
-
-```
-Authorization: Bearer <jwt_token>
+```bash
+npm install
+npm run build
+npm start
 ```
 
-**Response:**
+## Testing
 
-```json
-{
-  "userId": "uuid",
-  "email": "user@example.com"
-}
+```bash
+npm run test
 ```
 
----
-
-## 🧪 How to Test
-
-1. Register: `POST /signup`
-2. Login: `POST /login` → get token
-3. Use token in downstream services with `Authorization` header
+````

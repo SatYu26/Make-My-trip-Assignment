@@ -1,72 +1,68 @@
-# 💳 Payment Service
+# Payment Service
 
-Mocks external payments and returns success/failure.
+Handles user payments for bookings.
 
----
+## Features
 
-## 📌 Purpose
+- Process payment for booking
+- Update payment status
+- Trigger seat confirmation
 
-- Simulate payment gateway (80% success)
-- Return dummy transaction ID
+## Tech Stack
 
----
-
-## 🧰 Tech Stack
-
-- Node.js + TypeScript
+- Node.js
 - Express.js
+- PostgreSQL
 
----
+## Environment Variables
 
-## 🚀 Setup Instructions
+| Variable       | Description                          |
+|----------------|--------------------------------------|
+| `PORT`         | Port to run the server (7000)        |
+| `DATABASE_URL` | PostgreSQL connection string         |
 
-```bash
-cd payment-service
-npm install
-npm run dev
+## API Endpoints
+
+### POST /api/payments/initiate
+
+Initiates a mock payment for a booking.
+
+**Headers:**
 ````
 
-### Environment Variables
+Authorization: Bearer \<JWT\_TOKEN>
 
-```
-PORT=7000
-```
-
----
-
-## 🔗 API Endpoints
-
-### ✅ POST `/pay`
+````
 
 **Request:**
-
 ```json
 {
-  "bookingId": "bk_001",
-  "amount": 4580
+  "booking_id": 123,
+  "amount": 4999
 }
-```
+````
 
 **Response:**
 
 ```json
 {
-  "status": "success",
-  "transactionId": "txn_12345"
+  "message": "Payment successful",
+  "transaction_id": "txn_456"
 }
 ```
 
-*(OR)*
+## Setup
 
-```json
-{
-  "status": "failed",
-  "reason": "Insufficient balance"
-}
+```bash
+npm install
+npm run build
+npm start
 ```
 
----
+## Testing
 
-## 🧪 How to Test
+```bash
+npm run test
+```
 
-1. Call `/pay` with booking ID + amount
+````
