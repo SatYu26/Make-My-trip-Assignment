@@ -93,11 +93,12 @@ git clone <repo-url>
 cd flight-booking-system
 docker compose up --build
 ```
+This starts all 9 services, Postgres DBs, and Redis via Docker Compose.
+
 NOTE: **MAKE SURE ALL SERVICES ARE RUNNING
 IT CAN SHOW THAT SOME SERVICES HAVE  FAILED BUT JUST GO TO DOCKER DESKTOP AND MANUALLY START THEM ONCE AND IT WILL START WORKING.**
 
 USE POSTMAN COLLECTION FOR TESTING
-This starts all 9 services, Postgres DBs, and Redis via Docker Compose.
 
 ---
 
