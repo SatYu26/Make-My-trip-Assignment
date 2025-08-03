@@ -6,6 +6,10 @@ Built using **TypeScript**, **Node.js**, **PostgreSQL**, and **Redis**, with cle
 
 ---
 
+## AI Conversation History
+
+<a href="https://chatgpt.com/share/688f17e8-2678-8006-8041-1ce1901535bb"><b>https://chatgpt.com/share/688f17e8-2678-8006-8041-1ce1901535bb</b></a>
+
 ## 📌 System Purpose
 
 This is a complete backend for a flight booking platform (like MakeMyTrip). It includes 9 decoupled microservices handling:
