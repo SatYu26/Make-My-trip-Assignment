@@ -39,7 +39,7 @@ export const applyDiscount = async (req: Request, res: Response) => {
     }
 
     // Apply discount
-    const finalAmount = Math.max(0, bookingRows[ 0 ].price - discount.amount);
+    const finalAmount = Math.max(0, Number(bookingRows[ 0 ].price || 5000) - Number(discount.amount));
 
     res.json({ message: "Discount applied", finalAmount });
 };
