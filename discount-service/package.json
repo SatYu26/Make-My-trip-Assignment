@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node dist/app.js",
     "seed": "tsc && node dist/seed/seedDiscounts.js",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest"
   },
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.10",
