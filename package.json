@@ -1,0 +1,28 @@
+{
+  "name": "cred",
+  "version": "1.0.0",
+  "description": "A modular, scalable backend system for searching flights, locking seats, creating bookings, processing payments, applying discounts, generating tickets/invoices, and sending notifications.",
+  "main": "index.js",
+  "scripts": {
+    "test:all": "ts-node test-runner.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SatYu26/Make-My-trip-Assignment.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SatYu26/Make-My-trip-Assignment/issues"
+  },
+  "homepage": "https://github.com/SatYu26/Make-My-trip-Assignment#readme",
+  "dependencies": {
+    "child-process": "^1.0.2",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.2.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}

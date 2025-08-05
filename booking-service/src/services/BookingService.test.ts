@@ -63,4 +63,55 @@ describe('BookingService', () => {
 
 		expect(result).toBeUndefined();
 	});
+
+	it('should throw error if DB fails during createBooking', async () => {
+		(pool.query as jest.Mock).mockRejectedValue(new Error('DB error'));
+
+		await expect(
+			BookingService.createBooking({
+				userId: 'user123',
+				flightId: 'flight456',
+				seats: 2,
+				price: 5000
+			})
+		).rejects.toThrow('DB error');
+	});
+
+	it('should throw error if DB fails during getBooking', async () => {
+		(pool.query as jest.Mock).mockRejectedValue(new Error('DB error'));
+
+		await expect(BookingService.getBooking('booking123', 'user123')).rejects.toThrow('DB error');
+	});
+
+	it('should ensure status is PENDING when creating booking', async () => {
+		(pool.query as jest.Mock).mockResolvedValue({ rows: [ mockBooking ] });
+
+		await BookingService.createBooking({
+			userId: 'user123',
+			flightId: 'flight456',
+			seats: 2,
+			price: 5000
+		});
+
+		const [ [ , , , , status ] ] = (pool.query as jest.Mock).mock.calls[ 0 ][ 1 ];
+		expect(status).toBe('PENDING');
+	});
+
+	it('should return a booking with expected keys', async () => {
+		(pool.query as jest.Mock).mockResolvedValue({ rows: [ mockBooking ] });
+
+		const result = await BookingService.createBooking({
+			userId: 'user123',
+			flightId: 'flight456',
+			seats: 2,
+			price: 5000
+		});
+
+		expect(result).toHaveProperty('id');
+		expect(result).toHaveProperty('user_id');
+		expect(result).toHaveProperty('flight_id');
+		expect(result).toHaveProperty('seats');
+		expect(result).toHaveProperty('price');
+		expect(result).toHaveProperty('status');
+	});
 });

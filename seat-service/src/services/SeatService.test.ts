@@ -84,6 +84,5 @@ describe('SeatService', () => {
             expect(result).toEqual({ flightId, seatNumber });
         });
 
-        // Optional: Add failure scenarios if you plan to handle them in code
     });
 });
