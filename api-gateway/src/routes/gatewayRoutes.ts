@@ -7,7 +7,7 @@ const router = express.Router();
 const forward = async (req: any, res: any, url: string) => {
     try {
         console.log(`Forwarding request to: ${url}`);
-        const response = await axios({
+        const response = await axios.request({
             method: req.method,
             url,
             data: req.body,
