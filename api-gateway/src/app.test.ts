@@ -17,6 +17,9 @@ const createMockResponse = (data: any, status = 200, url = 'mock-url') => ({
     config: { url },
 });
 
+beforeEach(() => {
+    jest.clearAllMocks();
+});
 describe('API Gateway Routing', () => {
     beforeEach(() => {
         jest.clearAllMocks();
@@ -154,5 +157,8 @@ describe('API Gateway Routing', () => {
 
         expect(res.status).toBe(500);
         expect(res.body).toEqual({ error: 'Upstream error' });
+    });
+    beforeEach(() => {
+        jest.clearAllMocks();
     });
 });

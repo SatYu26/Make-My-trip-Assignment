@@ -92,11 +92,19 @@ This is a complete backend for a flight booking platform (like MakeMyTrip). It i
 git clone <repo-url>
 cd flight-booking-system
 docker compose up --build
+npm run test:all
 ```
 This starts all 9 services, Postgres DBs, and Redis via Docker Compose.
 
-NOTE: **MAKE SURE ALL SERVICES ARE RUNNING
-IT CAN SHOW THAT SOME SERVICES HAVE  FAILED BUT JUST GO TO DOCKER DESKTOP AND MANUALLY START THEM ONCE AND IT WILL START WORKING.**
+Run this for running each service individually
+```
+npm run test
+```
+
+Run this for running all services at once
+```
+npm run test:all
+```
 
 USE POSTMAN COLLECTION FOR TESTING
 
@@ -131,9 +139,6 @@ NOTIFICATION_SERVICE_URL=http://notification-service:9100
 ## 🧪 API Flow — Full Booking Journey (via Postman)
 
 Below is a complete end-to-end simulation of a flight booking using Postman or cURL. All APIs are routed via the **API Gateway** (`http://localhost:8080`):
-
-NOTE: **MAKE SURE ALL SERVICES ARE RUNNING
-IT CAN SHOW THAT SOME SERVICES HAVE  FAILED BUT JUST GO TO DOCKER DESKTOP AND MANUALLY START THEM ONCE AND IT WILL START WORKING.**
 
 1. **Signup**
 

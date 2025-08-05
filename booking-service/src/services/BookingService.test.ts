@@ -93,9 +93,10 @@ describe('BookingService', () => {
 			price: 5000
 		});
 
-		const [ [ , , , , status ] ] = (pool.query as jest.Mock).mock.calls[ 0 ][ 1 ];
+		const [ , , , , status ] = (pool.query as jest.Mock).mock.calls[ 0 ][ 1 ];
 		expect(status).toBe('PENDING');
 	});
+
 
 	it('should return a booking with expected keys', async () => {
 		(pool.query as jest.Mock).mockResolvedValue({ rows: [ mockBooking ] });

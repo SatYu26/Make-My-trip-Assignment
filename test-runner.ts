@@ -3,8 +3,8 @@ import path from 'path';
 
 const services = [
     'api-gateway',
+    'flight-search-service',
     'booking-service',
-    'flight-service',
     'seat-service',
     'payment-service',
     'discount-service',

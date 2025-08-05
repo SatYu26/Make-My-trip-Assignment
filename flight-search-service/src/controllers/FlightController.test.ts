@@ -44,7 +44,8 @@ describe('searchFlights Controller', () => {
         date: '2025-08-05'
     };
 
-    const mockCacheKey = `flights:${mockQuery.source}-${mockQuery.destination}-${mockQuery.date}`;
+    const uniqueDate = new Date().toISOString().slice(0, 10); // use YYYY-MM-DD
+    const mockCacheKey = `flights:${mockQuery.source}-${mockQuery.destination}-${uniqueDate}`;
 
     beforeEach(() => {
         jest.clearAllMocks();
