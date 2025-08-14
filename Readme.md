@@ -6,10 +6,6 @@ Built using **TypeScript**, **Node.js**, **PostgreSQL**, and **Redis**, with cle
 
 ---
 
-## AI Conversation History
-
-<a href="https://chatgpt.com/share/688f17e8-2678-8006-8041-1ce1901535bb"><b>https://chatgpt.com/share/688f17e8-2678-8006-8041-1ce1901535bb</b></a>
-
 ## 📌 System Purpose
 
 This is a complete backend for a flight booking platform (like MakeMyTrip). It includes 9 decoupled microservices handling:
@@ -86,6 +82,8 @@ This is a complete backend for a flight booking platform (like MakeMyTrip). It i
 * Docker and Docker Compose
 * `.env` files (see below)
 
+<b>NOTE: I have added `.env` files in the code so that its easy for anyone testing and refrencing the code. DO NOT DO THIS IN PRODUCTION ENVIRONMENT</b>
+
 ### 2. Clone and Run
 
 ```bash
@@ -113,6 +111,9 @@ USE POSTMAN COLLECTION FOR TESTING
 ## 🔐 .env Configuration
 
 Each service contains a `.env` file. Most include:
+
+<b>NOTE: I have added `.env` files in the code so that its easy for anyone testing and refrencing the code. DO NOT DO THIS IN PRODUCTION ENVIRONMENT</b>
+
 
 ```env
 PORT=XXXX
